@@ -19,8 +19,8 @@ export default class Hero extends PIXI.Sprite{
         this.y = Hero.POS_Y;
         this.currentPosition = { x: 1, y: 1 };
         this.state = Hero.STATE_IDLE;
-        this.hp = 10;
-        this.maxHp = 10;
+        this.hp = 3;
+        this.maxHp = 3;
         this.anchor.set(0.5, 0.5);
 
         this.onMonsterAttacked = this.onMonsterAttacked.bind(this);

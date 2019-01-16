@@ -45,9 +45,6 @@ document.addEventListener('keydown', (e) => {
     case 'KeyS':
         hero.dodge(Hero.DODGE_DIR_DOWN);
         break;
-    case 'KeyX':
-        monster.attack();
-        break;
   }
   
 })
@@ -74,6 +71,10 @@ PIXI.loader
       app.stage.addChild(monsterHealthbar);
       app.stage.addChild(monster);
       app.stage.addChild(hero);
+
+      setInterval(() => {
+        monster.attack();
+      }, 3000);
   })
   .on("progress", loader => console.log('Progress:', loader.progress));
 

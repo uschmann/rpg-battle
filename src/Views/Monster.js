@@ -9,7 +9,6 @@ import {
     EVENT_MONSTER_ATTACKED
 } from '../event';
 
-
 export default class Monster extends PIXI.Sprite {
 
     constructor() {
@@ -18,8 +17,8 @@ export default class Monster extends PIXI.Sprite {
         this.x = Monster.POS_X;
         this.y = Monster.POS_Y;
         this.state = Monster.STATE_IDLE;
-        this.hp = 5;
-        this.maxHp = 5;
+        this.hp = 100;
+        this.maxHp = 100;
         this.anchor.set(0.5, 0.5);
 
         this.onHeroAttack = this.onHeroAttack.bind(this);
