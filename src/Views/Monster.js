@@ -9,7 +9,6 @@ import {
     EVENT_MONSTER_ATTACKED
 } from '../event';
 
-
 export default class Monster extends PIXI.Sprite {
 
     constructor() {
