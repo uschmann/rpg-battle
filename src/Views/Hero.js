@@ -32,11 +32,12 @@ export default class Hero extends PIXI.Sprite{
         if(this.state !== Hero.STATE_IDLE) { return; }
         this.state = Hero.STATE_ATTACKING;
 
+        const duration = 0.1;
         
         tweener.add(this)
-        .to({ x: Hero.POS_X + 400 - 30 }, 0.1, Tweener.ease.easeIn)
+        .to({ x: Hero.POS_X + 400 - 30 }, duration, Tweener.ease.easeIn)
         .then(() => eventBus.emit(EVENT_HERO_ATTACKED, this))
-        .to({ x: Hero.POS_X }, 0.1, Tweener.ease.easeIn)
+        .to({ x: Hero.POS_X }, duration, Tweener.ease.easeIn)
         .then(() => this.state = Hero.STATE_IDLE);
     }
 

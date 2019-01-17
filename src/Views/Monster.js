@@ -2,6 +2,7 @@ import 'pixi.js'
 import eyeballSprite from '../gfx/eyeball.png';
 import tweener from '../tweener';
 import blink from '../animation/blink';
+
 import { 
     eventBus, 
     EVENT_HERO_ATTACKED, 
@@ -40,22 +41,11 @@ export default class Monster extends PIXI.Sprite {
         eventBus.emit(EVENT_MONSTER_UPDATED, this);
     }
 
-    attack() {
+    attack(attack) {
         if(this.state !== Monster.STATE_IDLE) { return; }
-
         this.state = Monster.STATE_ATTACKING;
-        blink(this).then(() => {
-            const positions = [
-                { x: 1, y: 1},
-                { x: 0, y: 1}
-            ];
-    
-            tweener.add(this)
-            .to({ x: this.x - 420 }, 0.2, Tweener.ease.backInOut)
-            .then(() => eventBus.emit(EVENT_MONSTER_ATTACKED, positions))
-            .to({ x: Monster.POS_X }, 0.2, Tweener.ease.easeIn)
-            .then(() => this.state = Monster.STATE_IDLE);
-        });
+
+        return attack(this).then(() => this.state = Monster.STATE_IDLE);
     }
 }
 

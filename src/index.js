@@ -6,6 +6,10 @@ import eyeballSprite from './gfx/eyeball.png';
 import Hero from './Views/Hero';
 import Monster from './Views/Monster';
 import HealthBar from './Views/HealthBar';
+import AttackArea from './Views/AttackArea';
+import getRandomItem from './utils/getRandomItem';
+import randomNumber from './utils/randomNumber';
+
 import { 
   eventBus, 
   EVENT_MONSTER_UPDATED,
@@ -16,6 +20,7 @@ let hero = null;
 let monster = null;
 let heroHealthbar = null;
 let monsterHealthbar = null;
+let attackArea = null;
 
 let app = new PIXI.Application({
   width: window.innerWidth,
@@ -25,13 +30,19 @@ let app = new PIXI.Application({
 });
 document.body.appendChild(app.view);
 
+import {
+  tackle,
+  tackleTop,
+  tackleDown
+} from './attack';
+
 document.addEventListener('keydown', (e) => {
   const { code } = e;
   e.preventDefault();
 
   switch(code) {
     case 'Space':
-      hero.attack();
+    hero.attack();
       break;
     case 'ArrowLeft':
     case 'KeyA':
@@ -45,6 +56,20 @@ document.addEventListener('keydown', (e) => {
     case 'KeyS':
         hero.dodge(Hero.DODGE_DIR_DOWN);
         break;
+
+
+    // Monster
+    /*
+    case 'KeyX':
+        monster.attack(tackle);
+        break;
+    case 'KeyC':
+        monster.attack(tackleTop);
+        break;
+    case 'KeyV':
+        monster.attack(tackleDown);
+        break;
+        */
   }
   
 })
@@ -53,6 +78,10 @@ PIXI.loader
   .add(heroSprite)
   .add(eyeballSprite)
   .load(() => {
+      attackArea = new AttackArea();
+      attackArea.x = 250;
+      attackArea.y = 150;
+
       hero = new Hero();
       monster = new Monster();
       heroHealthbar = new HealthBar();
@@ -67,14 +96,13 @@ PIXI.loader
       monsterHealthbar.setMaxValue(monster.maxHp);
       monsterHealthbar.setValue(monster.hp);
 
+      app.stage.addChild(attackArea);
       app.stage.addChild(heroHealthbar);
       app.stage.addChild(monsterHealthbar);
       app.stage.addChild(monster);
       app.stage.addChild(hero);
 
-      setInterval(() => {
-        monster.attack();
-      }, 3000);
+      attack();
   })
   .on("progress", loader => console.log('Progress:', loader.progress));
 
@@ -89,3 +117,13 @@ PIXI.loader
   eventBus.on(EVENT_HERO_UPDATED, hero => {
     heroHealthbar.setValue(hero.hp);
   });
+
+
+function attack() {
+  const attacks = [ tackle, tackleTop, tackleDown];
+  monster.attack(getRandomItem(attacks)).then(() => {
+    const nextAttack = randomNumber(500, 2000);
+    console.log(`Next attack in ${nextAttack/1000} seconds...`);
+    setTimeout(attack, nextAttack);
+  });
+}
